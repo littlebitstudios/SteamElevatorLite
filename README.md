@@ -5,7 +5,7 @@
 
 This is a continuation of the original [littlebitstudios/SteamElevator](https://github.com/littlebitstudios/SteamElevator) project. The original project was a WinForms application that allows you to easily quit and restart Steam with administrator privileges. This project does the same thing, but as a console app that simply switches between the two states (admin or not admin) when the app is run.
 
-This app may also be added to Steam as a non-Steam game to allow you to easily switch states from within Steam, especially useful in Big Picture mode (which is generally used with a controller). This is not required for the app to function, but is a convenience for controller users.
+This app cannot be used from within Steam. I recommend adding a shortcut to your desktop.
 # Installation
 Find the latest version in the releases. Download the zip file and extract it to a location of your choice (I use %USERPROFILE%\userapps). The actions of running the file are different depending on the current state of the Steam client.
 # Function
