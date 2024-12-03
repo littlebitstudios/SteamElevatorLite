@@ -1,0 +1,28 @@
+This software's installer is a PowerShell script.
+By default, Windows does not allow running PowerShell scripts for security reasons.
+To run the installer, you need to allow PowerShell scripts on your system.
+
+Instructions for Allowing PowerShell Scripts
+
+1. Open PowerShell with administrative privileges:
+    - Press `Win + X` or right click the Start Menu and select `Windows PowerShell (Admin)`.
+    - On Windows 11, you may have to click "Terminal (Admin)" instead.
+
+2. Check the current execution policy:
+    PS> Get-ExecutionPolicy
+
+3. If the execution policy is set to `Restricted`, change it to `RemoteSigned` or `Unrestricted`:
+    PS> Set-ExecutionPolicy RemoteSigned
+
+4. Confirm the change by typing `Y` and pressing `Enter`.
+
+5. Verify the new execution policy:
+    PS> Get-ExecutionPolicy
+
+6. You can now run PowerShell scripts on your system.
+
+Note: Be cautious when setting the execution policy to `Unrestricted` as it allows running all scripts without any restrictions.
+
+Alternate Method (Windows 11 Only)
+1. Type "setting:developer" in the Windows search bar and select "Use developer features".
+2. Select "PowerShell", and enable the toggle switch for "Change execution policy to allow local PowerShell scripts to run without signing".
