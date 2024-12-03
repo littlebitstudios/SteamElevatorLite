@@ -3,12 +3,20 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)
 ![Written in: C#](https://img.shields.io/badge/written%20in-C%23-blue.svg)
 
-This is a continuation of the original [littlebitstudios/SteamElevator](https://github.com/littlebitstudios/SteamElevator) project. The original project was a WinForms application that allows you to easily quit and restart Steam with administrator privileges. This project does the same thing, but as a console app that simply switches between the two states (admin or not admin) when the app is run.
+This is a continuation of the original [littlebitstudios/SteamElevator](https://github.com/littlebitstudios/SteamElevator) project. The original project was a WinForms application that allows you to easily quit and restart Steam with administrator privileges. This project does the same thing, but as a console app that simply switches between the two states (admin or not admin) by receiving an HTTP request on localhost or using a command line argument.
 
-This app cannot be used from within Steam. I recommend adding a shortcut to your desktop.
+You can add the SELCommander program to Steam as a non-Steam game to allow switching states from within Steam, which is especially useful if you're using a controller with Big Picture Mode. The reason it had to be two programs is so that the main file wouldn't keep restarting Steam as an admin if it was already running as an admin.
 # Installation
-Find the latest version in the releases. Download the zip file and extract it to a location of your choice (I use %USERPROFILE%\userapps). The actions of running the file are different depending on the current state of the Steam client.
+Find the latest version in the releases. Download the zip file and extract it to a location of your choice (I use %USERPROFILE%\userapps). The app will run in the background when it is started, with a dialog box appearing when it is started to tell you that it is running. To quit the app, run the executable again or type "localhost:12345/quit" in your browser address bar.
+
+If you add this to your startup folder, you will see the dialog box appear when you log in. It's just to tell you that the app is running.
+
+To find the startup folder on Windows, type "shell:startup" in the path bar of File Explorer. You can then create a shortcut to the executable in this folder.
 # Function
+To activate the program manually, either run SELCommander or type "localhost:12345/trigger" in your browser address bar. The program will then switch between the two states. If you want to quit the program, type "localhost:12345/quit" in your browser address bar.
+
+For security purposes, other devices on your network cannot trigger the software. You cannot type "[hostname/IP]:12345/trigger" in another device's browser. The HTTP requests are only used so that SteamElevatorLite and SELCommander can communicate with each other.
+
 The flow of the program is as follows:
 - Steam running as non-admin
   - Steam will close and restart as admin
@@ -17,7 +25,7 @@ The flow of the program is as follows:
 - Steam not running
   - Steam will start as admin
   
-In the cases where Steam is to start as an admin, you will see a UAC prompt appear (sometimes labeled as "Windows Security"). This is normal and is required for Steam to run as an administrator.
+In the cases where Steam is to start as an admin, you will see a UAC prompt appear (sometimes labeled as "Windows Security"). User Account Control is a security feature of Windows designed to prevent apps from running as an administrator without your knowledge, and you must accept the prompt for Steam to start as an admin.
 
 # Purpose
 Some games (notably games from HoYoverse or Kuro Games) require administrator privileges to run. Steam can still launch these games in its non-admin state (a UAC prompt appears), but the Steam overlay will not function which prevents some games such as Genshin Impact or Honkai Star Rail from being closed using a controller. This program allows you to easily switch between the two states without having to manually close Steam and start it with the "Run as administrator" option.

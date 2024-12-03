@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 
 class Program
 {
@@ -17,6 +19,69 @@ class Program
     public const uint TOKEN_QUERY = 0x0008;
 
     static void Main(string[] args)
+    {
+        if (args.Length > 0 && args[0] == "trigger")
+        {
+            Trigger();
+        }
+        else if (IsAlreadyRunning())
+        {
+            var result = MessageBox.Show("Another instance of SteamElevatorLite is already running. Do you want to quit?", "Instance Running", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                HttpClient client = new HttpClient();
+                client.GetAsync("http://localhost:12345/quit").Wait();
+                Environment.Exit(0);
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+        else
+        {
+            MessageBox.Show("SteamElevatorLite is running. If you want to quit, run the executable again or type \"http://localhost:12345/quit\" in your browser.", "SteamElevatorLite", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            StartHTTP();
+        }
+    }
+
+    static void StartHTTP()
+    {
+        HttpListener listener = new HttpListener();
+        listener.Prefixes.Add("http://localhost:12345/");
+        listener.Start();
+
+        Console.WriteLine("Listening on http://localhost:12345/");
+        while (true)
+        {
+            HttpListenerContext context = listener.GetContext();
+            HttpListenerRequest request = context.Request;
+            HttpListenerResponse response = context.Response;
+
+            if (request.Url.AbsolutePath == "/trigger")
+            {
+                response.StatusCode = 200;
+                response.StatusDescription = "OK";
+                response.Close();
+                Trigger();
+            }
+            else if (request.Url.AbsolutePath == "/quit")
+            {
+                response.StatusCode = 200;
+                response.StatusDescription = "OK";
+                response.Close();
+                Environment.Exit(0);
+            }
+            else
+            {
+                response.StatusCode = 404;
+                response.StatusDescription = "Not Found";
+                response.Close();
+            }
+        }
+    }
+
+    static void Trigger()
     {
         var steamProcess = Process.GetProcessesByName("steam").FirstOrDefault();
         if (steamProcess != null)
@@ -39,6 +104,12 @@ class Program
             Console.WriteLine("Steam is not running. Starting Steam with elevation.");
             StartSteam(true);
         }
+    }
+
+    static bool IsAlreadyRunning()
+    {
+        var processes = Process.GetProcessesByName("SteamElevatorLite");
+        return processes.Length > 1;
     }
 
     static bool IsProcessElevated(Process process)

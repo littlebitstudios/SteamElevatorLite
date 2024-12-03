@@ -82,3 +82,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Used for binaries
+SELBinaries/
+SteamElevatorLite.zip
