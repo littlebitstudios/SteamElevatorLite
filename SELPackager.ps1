@@ -22,7 +22,7 @@ if (-Not (Test-Path -Path $folderPath)) {
     New-Item -ItemType Directory -Path $folderPath
 }
 
-Wrire-Output "Copying binaries to $folderPath..."
+Write-Output "Copying binaries to $folderPath..."
 # Copy the binaries to the binaries folder
 Copy-Item -Recurse -Path ".\SteamElevatorLite\bin\Release\net8.0-windows\*" -Destination $folderPath
 Copy-Item -Recurse -Path ".\SELCommander\bin\Release\net9.0\*" -Destination $folderPath
