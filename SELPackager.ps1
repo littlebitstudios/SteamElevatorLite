@@ -1,5 +1,3 @@
-Import-Module PS2Exe
-
 # This script is meant to build binaries for the project and package them into a zip file.
 
 if (-Not (Test-Path -Path ".\SteamElevatorLite") -Or -Not (Test-Path -Path ".\SELCommander") -Or -Not (Test-Path -Path ".\AdditionalReleaseFiles")) {
