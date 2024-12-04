@@ -22,7 +22,14 @@ class Program
     {
         if (args.Length > 0 && args[0] == "trigger")
         {
-            Trigger();
+            if (args.Length > 1 && args[1] == "--noconfirm")
+            {
+                Trigger(false);
+            }
+            else
+            {
+                Trigger();
+            }
         }
         else if (IsAlreadyRunning())
         {
@@ -62,14 +69,20 @@ class Program
             {
                 response.StatusCode = 200;
                 response.StatusDescription = "OK";
+                bool showConfirmation = true;
+                if (request.QueryString["showConfirmation"] != null)
+                {
+                    bool.TryParse(request.QueryString["showConfirmation"], out showConfirmation);
+                }
                 response.Close();
-                Trigger();
+                Trigger(showConfirmation);
             }
             else if (request.Url.AbsolutePath == "/quit")
             {
                 response.StatusCode = 200;
                 response.StatusDescription = "OK";
                 response.Close();
+                MessageBox.Show("SteamElevatorLite is quitting.", "SteamElevatorLite", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Environment.Exit(0);
             }
             else
@@ -81,22 +94,33 @@ class Program
         }
     }
 
-    static void Trigger()
+    static void Trigger(bool ShowConfirmation = true)
     {
         var steamProcess = Process.GetProcessesByName("steam").FirstOrDefault();
         if (steamProcess != null)
         {
             bool isElevated = IsProcessElevated(steamProcess);
-            CloseSteam();
-            WaitForSteamToClose();
+            
+            DialogResult confirm = DialogResult.No;
 
-            if (isElevated)
+            if (ShowConfirmation)
             {
-                StartSteam(false);
+                confirm = MessageBox.Show($"Steam is running {(isElevated ? "with" : "without")} elevation. Do you want to restart Steam?", "Restart Steam", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
-            else
+
+            if (confirm == DialogResult.Yes || !ShowConfirmation)
             {
-                StartSteam(true);
+                CloseSteam();
+                WaitForSteamToClose();
+
+                if (isElevated)
+                {
+                    StartSteam(false);
+                }
+                else
+                {
+                    StartSteam(true);
+                }
             }
         }
         else

@@ -25,6 +25,8 @@ The flow of the program is as follows:
 - Steam not running
   - Steam will start as admin
   
+By default the program will ask for confirmation before switching states. When invoking from a browser, add ?showConfirmation=false to the URL to disable the confirmation dialog. For example, "localhost:12345/trigger?showConfirmation=false". When using SELCommander or the main program from the command line, type "trigger --noconfirm" after the executable file name to disable the confirmation dialog. If SELCommander was added to Steam, add "trigger --noconfirm" to the Launch Options field in the game properties.
+  
 In the cases where Steam is to start as an admin, you will see a UAC prompt appear (sometimes labeled as "Windows Security"). User Account Control is a security feature of Windows designed to prevent apps from running as an administrator without your knowledge, and you must accept the prompt for Steam to start as an admin.
 
 # Purpose
