@@ -35,4 +35,4 @@ if (Test-Path -Path $zipPath) {
     Remove-Item -Path $zipPath
 }
 
-Compress-Archive -Path ".\SELBinaries" -DestinationPath $zipPath -CompressionLevel NoCompression
+Compress-Archive -Path ".\SELBinaries\*" -DestinationPath $zipPath -CompressionLevel NoCompression
